@@ -1,0 +1,21 @@
+version: "3.0"
+services:
+  yeuai-spider:
+    build: .
+    ports: ['0.0.0.0:8080:8080']
+    depends_on:
+      - mongodb
+    environment:
+      - DEBUG=YeuAI.*
+      - BD_HOST=mongodb
+      - NODE_ENV=production
+    networks: ['yeuai-network']
+
+  mongodb:
+    image: mongo
+    volumes:
+      - /usr/local/mongodb:/data/db
+    ports: ['0.0.0.0:27017:27017']
+    networks: ['yeuai-network']
+
+networks: {yeuai-network: {}}

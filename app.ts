@@ -1,21 +1,23 @@
+import { get as getConfig } from "config";
 import { DbHelperUi, Launcher, PuppeteerWorkerFactory } from "ppspider";
-import { config } from "./config";
 import { QuotesTask } from "./tasks/quotes.task";
 import { TwitterTask } from "./tasks/twitter.task";
 
 @Launcher({
   workplace: __dirname + "/workplace",
+  // dbUrl: "nedb://workplace_nedb/nedb", // (default)
+  dbUrl: getConfig("DB_URL"),
   tasks: [
     // TwitterTask,
     QuotesTask,
   ],
   workerFactorys: [
-    new PuppeteerWorkerFactory(config.puppeteer),
+    new PuppeteerWorkerFactory(getConfig("puppeteer")),
   ],
   dataUis: [
     DbHelperUi,
   ],
-  logger: config.logger,
-  webUiPort: 9001,
+  logger: getConfig("logger"),
+  webUiPort: 8080,
 })
 class App {}

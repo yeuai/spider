@@ -1,0 +1,8 @@
+---
+DB_URL: mongodb://localhost:27017/yeuai-spider
+puppeteer:
+  headless: true
+  devtools: false
+logger:
+  level: info
+tasks: []

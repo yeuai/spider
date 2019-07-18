@@ -1,0 +1,9 @@
+---
+DB_URL: nedb://workplace/spider
+puppeteer:
+  headless: false
+  devtools: true
+logger:
+  level: info
+tasks: []
+
