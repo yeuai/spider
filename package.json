@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "dev": "ts-node app.ts",
     "start": "node ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,13 +25,24 @@
   },
   "homepage": "https://github.com/yeuai/spider#readme",
   "devDependencies": {
+    "@types/cheerio": "^0.22.11",
+    "@types/jquery": "^3.3.29",
+    "@types/mongodb": "^3.1.27",
+    "@types/mysql": "^2.15.5",
+    "@types/nedb": "^1.8.5",
     "@types/node": "^12.0.7",
     "@types/puppeteer": "^1.12.4",
-    "typescript": "^3.5.1",
+    "@types/request": "^2.48.2",
+    "@types/ssh2": "^0.5.35",
     "ts-node": "^8.0.3",
-    "ts-node-dev": "^1.0.0-pre.32"
+    "ts-node-dev": "^1.0.0-pre.32",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.1"
   },
   "dependencies": {
-    "ppspider": "^2.1.10"
+    "cheerio": "1.0.0-rc.3",
+    "mysql": "2.16.0",
+    "ppspider": "2.2.1",
+    "ssh2": "0.6.1"
   }
 }
