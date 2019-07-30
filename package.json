@@ -1,7 +1,7 @@
 {
   "name": "@yeuai/spider",
   "version": "1.0.0",
-  "description": "Spider, A news Crawler and Keyword Automation Research for Business",
+  "description": "A news Crawler and Keyword Automation Research for Business",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -42,7 +42,7 @@
   "dependencies": {
     "cheerio": "1.0.0-rc.3",
     "mysql": "2.16.0",
-    "ppspider": "2.2.1",
+    "ppspider": "^2.2.1",
     "ssh2": "0.6.1"
   }
 }

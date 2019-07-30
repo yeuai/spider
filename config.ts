@@ -1,7 +1,7 @@
 export const config = {
   puppeteer: {
-    headless: false,
-    devtools: true,
+    headless: true,
+    devtools: false,
     // args: [
     //     "--proxy-server=127.0.0.1:2007"
     // ]
