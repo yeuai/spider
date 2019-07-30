@@ -19,15 +19,19 @@ function md5(text: string) {
 
 export class VNExpressTask {
 
+  private userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36";
+
   @OnStart({
     urls: "https://vnexpress.net/",
   })
   @AddToQueue({ name: "vnexpress_topics" })
   public async getQuotes(job: Job) {
 
-    const topics: string[] = [];
-    categories.forEach((x) => {
-      topics.push(job.url + x);
+    const topics = categories.map((x) => {
+      const subJob = new Job(job.url + x);
+      subJob.datas.baseHref = job.url;
+      subJob.datas.referer = job.url;
+      return subJob;
     });
 
     return topics;
@@ -43,7 +47,13 @@ export class VNExpressTask {
     { name: "vnexpress_articles" },
   ])
   public async fromQueue(job: Job) {
-    const htmlRes = await RequestUtil.simple({ url: job.url });
+    const htmlRes = await RequestUtil.simple({
+      url: job.url,
+      headers: {
+        "Referer": job.datas.referer,
+        "User-Agent": this.userAgent,
+      },
+    });
     const $ = Cheerio.load(htmlRes.body);
 
     const articles = $("body section.sidebar_1 > article > h4 > a:first-child").map((index, element) => {
@@ -51,11 +61,24 @@ export class VNExpressTask {
       return $quoteEle.attr("href");
     }).get();
 
-    // load more page?
+    // load more page ...
+    const nextPages: Job[] = [];
+    const next = $("#pagination > a.next").attr("href");
+    console.log("next page: ", next);
+    if (next) {
+      const subJob = new Job(job.datas.baseHref + next);
+      subJob.datas.baseHref = job.datas.baseHref;
+      subJob.datas.referer = job.url;
+      nextPages.push(subJob);
+    }
 
     return {
-      vnexpress_topics: [],
-      vnexpress_articles: articles,
+      vnexpress_topics: nextPages,
+      vnexpress_articles: articles.map((x) => {
+        const subJob = new Job(x);
+        subJob.datas.baseHref = job.datas.baseHref;
+        subJob.datas.referer = job.url;
+      }),
     };
   }
 
@@ -66,7 +89,13 @@ export class VNExpressTask {
   public async scrape(job: Job) {
     console.log("Read: " + job.url);
 
-    const htmlRes = await RequestUtil.simple({ url: job.url });
+    const htmlRes = await RequestUtil.simple({
+      url: job.url,
+      headers: {
+        "Referer": job.datas.referer,
+        "User-Agent": this.userAgent,
+      },
+    });
     const $ = Cheerio.load(htmlRes.body);
 
     const article = {
